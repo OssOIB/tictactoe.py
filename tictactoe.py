@@ -72,19 +72,51 @@ def terminal(board):
     """
     Returns True if game is over, False otherwise.
     """
-    raise NotImplementedError
+    if winner(board) is not None:
+        return True
+    for row in board:
+        for cell in row:
+            if cell == EMPTY:
+                return False
+    return True
 
 
 def utility(board):
     """
     Returns 1 if X has won the game, -1 if O has won, 0 otherwise.
     """
-    raise NotImplementedError
+    if winner(board) == X:
+        return 1
+    elif winner(board) == O:
+        return -1
+    else:
+        return 0
 
 
 def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    raise NotImplementedError
+    if terminal(board):
+        return None
+
+    if player(board) == X:
+        v = -math.inf
+        best_action = None
+        for action in actions(board):
+            min_value_result = min_value(result(board, action))
+            if min_value_result > v:
+                v = min_value_result
+                best_action = action
+    else:
+        v = math.inf
+        best_action = None
+        for action in actions(board):
+            max_value_result = max_value(result(board, action))
+            if max_value_result < v:
+                v = max_value_result
+                best_action = action
+
+    return best_action
+
 
