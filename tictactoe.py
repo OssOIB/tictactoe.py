@@ -119,4 +119,52 @@ def minimax(board):
 
     return best_action
 
+def max_value(board):
+    if terminal(board):
+        return utility(board)
+    v = -math.inf
+    for action in actions(board):
+        v = max(v, min_value(result(board, action)))
+    return v
 
+
+def min_value(board):
+    if terminal(board):
+        return utility(board)
+    v = math.inf
+    for action in actions(board):
+        v = min(v, max_value(result(board, action)))
+    return v
+
+def print_board(board):
+    """
+    Prints the current state of the board.
+    """
+    for row in board:
+        print(row)
+
+def play():
+    """
+    Plays a game of tic-tac-toe.
+    """
+    board = initial_state()
+    current_player = X
+
+    while not terminal(board):
+        print_board(board)
+        print(f"{current_player}'s turn.")
+        if current_player == X:
+            row = int(input("Enter row: "))
+            col = int(input("Enter column: "))
+            action = (row, col)
+        else:
+            action = minimax(board)
+        board = result(board, action)
+        current_player = player(board)
+
+    print_board(board)
+    winner_player = winner(board)
+    if winner_player is None:
+        print("Draw")
+    else:
+        print(f"{winner_player} wins!")
